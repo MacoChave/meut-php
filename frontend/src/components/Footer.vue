@@ -1,11 +1,11 @@
 <template>
-	<footer class="bg-gray-800 text-gray-300 py-4 mt-10">
-		<div class="max-w-7xl mx-auto px-4 text-ceter">
-			<p>&copy; {{ year }} MEUT. Todos los derechos reservados</p>
+	<footer class="text-gray-950 py-12">
+		<div class="w-full mx-auto px-4">
+			<p class="text-center">
+				Administración 2025-2019 &copy; Decano Henry Arriaga
+			</p>
 		</div>
 	</footer>
 </template>
 
-<script setup lang="ts">
-	const year = new Date().getFullYear();
-</script>
+<script setup lang="ts"></script>

@@ -1,5 +1,5 @@
-module.exports = {
-	content: ['./src/**/*.{js,ts,vue}', './public/**/*.php'],
+export default {
+	content: ['./index.html', './src/**/*.{js,jsx,ts,tsx,vue}', '../**/*.php'],
 	theme: {
 		extend: {},
 	},

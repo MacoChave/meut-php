@@ -1,7 +1,6 @@
 <template>
 	<MainLayout>
-		<div
-			class="flex flex-col items-center justify-center min-h-screen bg-white">
+		<div class="flex flex-col items-center justify-center h-full bg-white">
 			<h1 class="text-2xl font-semibold mb-6">Inicio de sesión</h1>
 
 			<form

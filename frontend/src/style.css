@@ -1,3 +1,67 @@
-@tailwind base;
+/* @tailwind base;
 @tailwind components;
-@tailwind utilities;
+@tailwind utilities; */
+
+@import 'tailwindcss';
+
+@theme {
+	--color-white-50: #e5e5e5;
+	--color-white-100: #cccccc;
+	--color-white-200: #9e9e9e;
+	--color-white-300: #6f6f6f;
+	--color-white-400: #444444;
+	--color-white-500: #1e1e1e;
+	--color-white-600: #191919;
+	--color-white-700: #151515; /* PENDING PROCESS */
+	--color-white-800: #111111;
+	--color-white-900: #070707;
+	--color-white-950: #040404;
+
+	--color-primary-50: #f1f3ff;
+	--color-primary-100: #dfe4ff;
+	--color-primary-200: #becaff;
+	--color-primary-300: #9bb0ff;
+	--color-primary-400: #7596ff;
+	--color-primary-500: #447cff; /* ACCENT COLOR */
+	--color-primary-600: #0064ec;
+	--color-primary-700: #0050c0;
+	--color-primary-800: #003d95;
+	--color-primary-900: #002a6c;
+	--color-primary-950: #00225b; /* MAIN COLOR */
+
+	--color-secundary-50: #ffecec;
+	--color-secundary-100: #ffdddd;
+	--color-secundary-200: #ffb7b7;
+	--color-secundary-300: #ff9191;
+	--color-secundary-400: #ff6565;
+	--color-secundary-500: #ff0000; /* SECONDARY COLOR */ /* ERROR PROCESS */
+	--color-secundary-600: #ce0000;
+	--color-secundary-700: #9c0000;
+	--color-secundary-800: #6d0000;
+	--color-secundary-900: #450000;
+	--color-secundary-950: #2d0000;
+
+	--color-secundary-50: #f2effa;
+	--color-secundary-100: #e8e2f7;
+	--color-secundary-200: #d0c3ee;
+	--color-secundary-300: #bba6e6;
+	--color-secundary-400: #a78ade;
+	--color-secundary-500: #916ad3;
+	--color-secundary-600: #7f4cc8;
+	--color-secundary-700: #663aa3;
+	--color-secundary-800: #4a2979;
+	--color-secundary-900: #331a55;
+	--color-secundary-950: #271343; /* THIRD COLOR */
+
+	--color-success-50: #d9fdd8;
+	--color-success-100: #9efb99;
+	--color-success-200: #63ea59;
+	--color-success-300: #56ce4d;
+	--color-success-400: #4bb543; /* SUCCESS PROCESS */
+	--color-success-500: #3d9636;
+	--color-success-600: #2e7729;
+	--color-success-700: #21591d;
+	--color-success-800: #143d11;
+	--color-success-900: #082307;
+	--color-success-950: #041503;
+}

@@ -1,4 +1,9 @@
 <?php
+require __DIR__ . '/../vendor/autoload.php';
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/..');
+$dotenv->load();
+require __DIR__ . '/../helpers/vite.php';
+
 $manifest = json_decode(file_get_contents(__DIR__ . '/dist/.vite/manifest.json'), true);
 $entry = $manifest['src/main.ts'];
 $jsFile = $entry['file'] ?? 'app.js';
@@ -22,10 +27,11 @@ $articulos = [
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PHP + Vue SSR Simulado</title>
-    <link rel="stylesheet" href="/dist/<?php echo $cssFile ?>">
+    <!-- <link rel="stylesheet" href="/dist/<?php echo $cssFile ?>"> -->
+    <?php echo vite('src/main.ts') ?>
 </head>
 
-<body class="bg-gray-100 p-6">
+<body class="">
     <div id="app">
         <h1 class="text-xl font-bold">Contenido desde PHP</h1>
         <ul class="list-disc ml-6">
@@ -45,7 +51,7 @@ $articulos = [
         <!-- Aquí Vue hidrata encima -->
     </div>
 
-    <script type="module" src="/dist/<?php echo $jsFile ?>"></script>
+    <!-- <script type="module" src="/dist/<?php echo $jsFile ?>"></script> -->
 </body>
 
 </html>
