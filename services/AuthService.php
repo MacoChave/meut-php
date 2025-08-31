@@ -6,13 +6,13 @@ use DTO\LoginRequestDTO;
 use DTO\LoginResponseDTO;
 use DTO\ResponseDTO;
 use Firebase\JWT\JWT;
-use Models\UserModels;
+use Repositories\UserRepository;
 
 class AuthService
 {
     public function login(LoginRequestDTO $login): LoginResponseDTO
     {
-        $user = UserModels::findByEmail($login->email);
+        $user = UserRepository::findByEmail($login->email);
 
         if (!$user || !password_verify($login->password, $user['password'])) {
             return new LoginResponseDTO(0, "");

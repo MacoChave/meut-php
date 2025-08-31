@@ -1,10 +1,10 @@
 <?php
 
-namespace Models;
+namespace Repositories;
 
 use PDO;
 
-class UserModels
+class UserRepository
 {
     public static function findByEmail(string $email): ?array
     {
