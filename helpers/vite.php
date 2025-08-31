@@ -14,7 +14,7 @@ HTML;
     }
 
     // PROD MODE -> Leer manifest.json
-    $manifestPath = __DIR__ . '/../public/dist/.vite/manifest.json';
+    $manifestPath = __DIR__ . '/../dist/.vite/manifest.json';
 
     if (!file_exists($manifestPath)) {
         throw new RuntimeException("El archivo de manifiesto de Vite no se encontró en $manifestPath. ¿Has ejecutado la compilación de producción?");
