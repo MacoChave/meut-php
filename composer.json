@@ -5,11 +5,11 @@
 	},
 	"autoload": {
 		"psr-4": {
-			"App\\": "src/",
-			"DTO\\": "dto/",
-			"Controllers\\": "controllers/",
-			"Services\\": "services/",
-			"Repositories\\": "repositories/"
+			"App\\": "backend/src/",
+			"DTO\\": "backend/dto/",
+			"Controllers\\": "backend/controllers/",
+			"Services\\": "backend/services/",
+			"Repositories\\": "backend/repositories/"
 		}
 	}
 }
