@@ -5,7 +5,19 @@ use Controllers\StatusController;
 use Controllers\UserController;
 use Core\Router;
 
+header('Access-Control-Allow-Origin: http://localhost:5173');
+header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Request-With');
+header('Access-Control-Allow-Credentials: true');
+
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(204);
+    exit;
+}
+
 $router->add('POST', '/api/login', [AuthController::class, 'login']);
+$router->add('POST', '/api/logout', [AuthController::class, 'logout']);
+
 $router->add('GET', '/api/status', [StatusController::class, 'getStatus']);
 $router->add('GET', '/api/status/db', [StatusController::class, 'getDbStatus']);
 

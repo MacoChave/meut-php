@@ -2,7 +2,7 @@
 
 namespace DTO;
 
-class LoginRequestDTO
+class LoginDTO
 {
     public string $email;
     public string $password;
@@ -11,17 +11,5 @@ class LoginRequestDTO
     {
         $this->email = $email;
         $this->password = $password;
-    }
-}
-
-class LoginResponseDTO
-{
-    public int $userId;
-    public string $token;
-
-    public function __construct(int $userId, string $token)
-    {
-        $this->userId = $userId;
-        $this->token = $token;
     }
 }

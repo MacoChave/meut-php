@@ -50,7 +50,7 @@
 		// Aquí puedes manejar la lógica de inicio de sesión
 		console.log('Datos del formulario:', formData.value);
 		try {
-			const { data } = await api.post<{ token: string }>('/auth/login', {
+			const { data } = await api.post<{ token: string }>('/login', {
 				email: formData.value.email,
 				password: formData.value.password,
 			});
