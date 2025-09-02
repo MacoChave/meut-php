@@ -1,6 +1,11 @@
 <?php
 // require_once __DIR__ . '/../vendor/autoload.php';
 require_once __DIR__ . '/../backend/config/bootstrap.php';
+
+use Core\Router;
+
+$router = new Router();
+
 require_once __DIR__ . '/../backend/routes/api.php';
 
 // Obtener ruta solicitada
@@ -9,7 +14,7 @@ $method = $_SERVER['REQUEST_METHOD'];
 
 // Si la ruta empieza con /api -> procesamos backend
 if (strpos($uri, '/api') === 0) {
-    routeRequest($uri, $method);
+    $router->dispatch($uri, $method);
     exit;
 }
 

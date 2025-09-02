@@ -9,11 +9,11 @@ class Router
     public function add(string $method, string $pattern, callable|array $handler, array $middlewares = []): void
     {
         // Convertimos {param} en regex
-        $regex = preg_replace('#\{([\w]+)\}#', '(?P<$1>[^/]+)', $pattern);
+        $regex = preg_replace('#\{([a-zA-Z0-9_]+)\}#', '(?P<\1>[^/]+)', $pattern);
         $regex = "#^" . $regex . "$#";
 
         $this->routes[$method][] = [
-            'pattern' => $regex,
+            'regex' => $regex,
             'handler' => $handler,
             'middlewares' => $middlewares
         ];
@@ -30,7 +30,7 @@ class Router
         }
 
         foreach ($this->routes[$method] as $route) {
-            if (preg_match($route['pattern'], $path, $matches)) {
+            if (preg_match($route['regex'], $path, $matches)) {
                 // Ejecutar middlewares
                 foreach ($route['middlewares'] as $middleware) {
                     $middlewareResult = (new $middleware())->handle();
