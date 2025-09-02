@@ -9,7 +9,8 @@
 			"DTO\\": "backend/dto/",
 			"Controllers\\": "backend/controllers/",
 			"Services\\": "backend/services/",
-			"Repositories\\": "backend/repositories/"
+			"Repositories\\": "backend/repositories/",
+			"Core\\": "backend/core/"
 		}
 	}
 }
