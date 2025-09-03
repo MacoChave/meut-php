@@ -40,6 +40,7 @@
 	import FormControl from '@/components/FormControl.vue';
 	import { ref } from 'vue';
 	import { api } from '../../services/apiClient';
+	import Swal from 'sweetalert2';
 
 	const formData = ref({
 		email: '',
@@ -55,8 +56,19 @@
 				password: formData.value.password,
 			});
 			console.log('Respuesta del servidor:', data);
-		} catch (error) {
-			console.error('Error durante el inicio de sesión:', error);
+			// localStorage.setItem('token', data.token);
+		} catch ({ response }: any) {
+			let { data } = response;
+
+			Swal.fire({
+				toast: true,
+				position: 'top-end',
+				showConfirmButton: false,
+				timer: 3000,
+				timerProgressBar: true,
+				icon: 'error',
+				title: data?.error || 'Error en el inicio de sesión',
+			});
 		}
 	};
 </script>

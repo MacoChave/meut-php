@@ -21,7 +21,13 @@ class AuthController
     {
         $data = json_decode(file_get_contents('php://input'), true) ?? [];
 
-        if (!isset($data['email']) || !isset($data['password'])) {
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            http_response_code(400);
+            echo json_encode(new ResponseDTO(400, null, 'JSON inválido'));
+            return;
+        }
+
+        if (!isset($data['email']) || !isset($data['password']) || empty(trim($data['email'])) || empty(trim($data['password']))) {
             http_response_code(400);
             echo json_encode(new ResponseDTO(400, null, 'Correo electrónico y contraseña son obligatorios'));
             return;
@@ -34,13 +40,7 @@ class AuthController
 
         $loginResponse = $this->authService->login($dto);
 
-        header('Content-Type: application/json');
-        http_response_code($loginResponse->userId ? 200 : 401);
-        echo json_encode(new ResponseDTO(
-            $loginResponse->userId ? 200 : 401,
-            $loginResponse->userId ? ['userId' => $loginResponse->userId, 'token' => $loginResponse->token] : null,
-            $loginResponse->userId ? null : 'Correo electrónico o contraseña incorrectos'
-        ));
+        $this->sendResponse($loginResponse->status, $loginResponse->data, $loginResponse->error);
     }
 
     public function logup(): void
@@ -55,14 +55,20 @@ class AuthController
             trim($data['userIdentification'] ?? ''),
             trim($data['userAddress'] ?? ''),
             trim($data['bornDate'] ?? ''),
-            trim($data['phoneNumber'] ?? ''),
+            trim($data['phone'] ?? ''),
             trim($data['email'] ?? ''),
             trim($data['password'] ?? '')
         );
 
         $response = $this->authService->logup($dto);
 
+        $this->sendResponse($response->status, $response->data, $response->error);
+    }
+
+    private function sendResponse(int $status, $data = null, ?string $error = null): void
+    {
+        http_response_code($status);
         header('Content-Type: application/json');
-        echo json_encode($response);
+        echo json_encode(new ResponseDTO($status, $data, $error));
     }
 }

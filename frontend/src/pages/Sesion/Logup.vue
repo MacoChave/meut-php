@@ -53,6 +53,12 @@
 						label="Dirección"
 						placeholder="Ingrese su dirección de residencia" />
 					<FormControl
+						v-model="formData.phone"
+						type="text"
+						id="phone"
+						label="Teléfono"
+						placeholder="Ingrese su número de teléfono" />
+					<FormControl
 						v-model="formData.bornDate"
 						type="date"
 						id="bornDate"
@@ -99,6 +105,8 @@
 	import MainLayout from '@/layouts/MainLayout.vue';
 	import StepForm from '@/components/StepForm.vue';
 	import FormControl from '../../components/FormControl.vue';
+	import { api } from '../../services/apiClient';
+	import Swal from 'sweetalert2';
 
 	const formData = ref({
 		firstName: '',
@@ -108,6 +116,7 @@
 		userRegister: '',
 		userIdentification: '',
 		userAddress: '',
+		phone: '',
 		email: '',
 		password: '',
 		confirmPassword: '',
@@ -119,8 +128,44 @@
 		{ title: 'Seguridad', content: 'Security' },
 	];
 
-	const handleSubmit = (data: any) => {
-		console.log('Formulario enviado con datos:', data);
+	const handleSubmit = async () => {
+		try {
+			console.log('Datos del formulario:', formData.value);
+			const { data } = await api.post<any>('/logup', {
+				firstName: formData.value.firstName,
+				lastName: formData.value.lastName,
+				gender: formData.value.gender,
+				bornDate: formData.value.bornDate,
+				userRegister: formData.value.userRegister,
+				userIdentification: formData.value.userIdentification,
+				userAddress: formData.value.userAddress,
+				phone: formData.value.phone,
+				email: formData.value.email,
+				password: formData.value.password,
+			});
+			console.log('Respuesta del servidor:', data);
+			Swal.fire({
+				toast: true,
+				position: 'top-end',
+				showConfirmButton: false,
+				timer: 3000,
+				timerProgressBar: true,
+				icon: 'success',
+				title: data.message || 'Usuario registrado con éxito',
+			});
+		} catch ({ response }: any) {
+			let { data } = response;
+
+			Swal.fire({
+				toast: true,
+				position: 'top-end',
+				showConfirmButton: false,
+				timer: 3000,
+				timerProgressBar: true,
+				icon: 'error',
+				title: data.error || 'Error al registrar el usuario',
+			});
+		}
 	};
 </script>
 

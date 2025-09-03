@@ -11,42 +11,42 @@ use Repositories\UserRepository;
 
 class AuthService
 {
-    public function login(LoginDTO $login): LoginResponseDTO
+    public function login(LoginDTO $login): ResponseDTO
     {
-        $user = UserRepository::findByEmail($login->email);
+        $resultUser = UserRepository::findByEmail($login->email);
 
-        if (!$user) {
-            http_response_code(401);
-            return new LoginResponseDTO(0, '');
+        if ($resultUser->status !== 200) {
+            http_response_code($resultUser->status);
+            return new ResponseDTO($resultUser->status, $resultUser->data, $resultUser->error);
         }
 
-        if (!password_verify($login->password, $user['password'])) {
+        if ($resultUser->data === null) {
+            http_response_code(404);
+            return new ResponseDTO(404, null, 'Usuario no encontrado');
+        }
+
+        $userData = $resultUser->data;
+
+        if (!isset($userData['pass']) || !password_verify($login->password, $userData['pass'])) {
             http_response_code(401);
-            return new LoginResponseDTO(0, '');
+            return new ResponseDTO(401, null, 'Credenciales inválidas');
         }
 
         $payload = [
-            'userId' => $user['id'],
-            'email' => $user['email'],
+            'userId' => $userData['id_usuario'],
+            'email' => $userData['email'],
             'iat' => time(),
             'exp' => time() + getenv('JWT_EXPIRATION', 60 * 60) // Token válido por 1 hora
         ];
         $token = JWT::encode($payload, getenv('JWT_SECRET', 'secret'), 'HS256');
 
-        return new LoginResponseDTO($user['id'], $token);
+        return new ResponseDTO(200, ['userId' => $userData['id_usuario'], 'email' => $userData['correo'], 'token' => $token], null);
     }
 
     public function logup(UserDTO $user): ResponseDTO
     {
-        // Hash the password before storing it
-        $user->password = password_hash($user->password, PASSWORD_BCRYPT);
+        $result = UserRepository::insertUser($user);
 
-        $newUser = UserRepository::insertUser($user);
-
-        return new ResponseDTO(
-            $newUser ? 201 : 500,
-            null,
-            'Usuario creado exitosamente'
-        );
+        return $result;
     }
 }

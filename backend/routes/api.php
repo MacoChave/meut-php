@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 $router->add('POST', '/api/login', [AuthController::class, 'login']);
-$router->add('POST', '/api/logout', [AuthController::class, 'logout']);
+$router->add('POST', '/api/logup', [AuthController::class, 'logup']);
 
 $router->add('GET', '/api/status', [StatusController::class, 'getStatus']);
 $router->add('GET', '/api/status/db', [StatusController::class, 'getDbStatus']);
