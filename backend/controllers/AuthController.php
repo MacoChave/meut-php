@@ -3,9 +3,9 @@
 namespace Controllers;
 
 use DTO\LoginDTO;
-use DTO\LogupDTO;
 use DTO\ResponseDTO;
 use DTO\UserDTO;
+use Helpers\Log;
 use Services\AuthService;
 
 class AuthController
@@ -47,6 +47,8 @@ class AuthController
     {
         $data = json_decode(file_get_contents('php://input'), true) ?? [];
 
+        Log::info(json_encode($data));
+
         $dto = new UserDTO(
             trim($data['firstName'] ?? ''),
             trim($data['lastName'] ?? ''),
@@ -57,10 +59,13 @@ class AuthController
             trim($data['bornDate'] ?? ''),
             trim($data['phone'] ?? ''),
             trim($data['email'] ?? ''),
-            trim($data['password'] ?? '')
+            trim($data['password'] ?? ''),
+            trim($data['municipality_id'] ?? 0)
         );
 
-        $response = $this->authService->logup($dto);
+        $response = $this->authService->logup($dto, $data['rol'] ?? 6);
+
+        Log::info(json_encode($response));
 
         $this->sendResponse($response->status, $response->data, $response->error);
     }

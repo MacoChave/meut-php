@@ -4,6 +4,7 @@ namespace Repositories;
 
 use DTO\ResponseDTO;
 use DTO\UserDTO;
+use Helpers\Log;
 use PDO;
 use PDOException;
 
@@ -24,6 +25,7 @@ class UserRepository
 
             return new ResponseDTO(200, $user, null);
         } catch (PDOException $ex) {
+            Log::error(json_encode($ex->getMessage()));
             return new ResponseDTO(500, null, 'Error al obtener el usuario: ' . $ex->getMessage());
         }
     }
@@ -43,17 +45,18 @@ class UserRepository
                 return new ResponseDTO(404, null, 'Usuario no encontrado');
             }
         } catch (PDOException $ex) {
+            Log::error(json_encode($ex->getMessage()));
             return new ResponseDTO(500, null, 'Error al obtener el usuario: ' . $ex->getMessage());
         }
     }
 
-    public static function insertUser(UserDTO $user): ResponseDTO
+    public static function insertUser(UserDTO $user, string $id_rol): ResponseDTO
     {
         try {
             $pdo = require __DIR__ . "/../config/database.php";
 
             // EXEC PROCEDURE ut_sp_crear_usuario
-            $stmt = $pdo->prepare("CALL ut_sp_crear_usuario(:nombre, :apellido, :genero, :usuario_registro, :identificacion, :direccion, :fecha_nacimiento, 1, 3, :telefono, :correo, :contrasena)");
+            $stmt = $pdo->prepare("CALL ut_sp_crear_usuario(:nombre, :apellido, :genero, :usuario_registro, :identificacion, :direccion, :fecha_nacimiento, :id_municipio, :id_rol, :telefono, :correo, :contrasena)");
 
             $stmt->execute([
                 ":nombre" => $user->first_name,
@@ -63,14 +66,18 @@ class UserRepository
                 ":identificacion" => $user->uid,
                 ":direccion" => $user->address,
                 ":fecha_nacimiento" => $user->birth_date,
+                ":id_municipio" => $user->municipality_id,
+                ":id_rol" => $id_rol,
                 ":telefono" => $user->phone ?? 0,
                 ":correo" => $user->email,
                 ":contrasena" => password_hash($user->password, PASSWORD_BCRYPT),
             ]);
 
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
             return new ResponseDTO(200, $result, null);
         } catch (PDOException $ex) {
+            Log::error(json_encode($ex->getMessage()));
             return new ResponseDTO(500, null, 'Error al crear el usuario: ' . $ex->getMessage());
         }
     }

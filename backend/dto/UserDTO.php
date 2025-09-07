@@ -15,7 +15,7 @@ class UserDTO
     public string $phone;
     public string $email;
     public string $password;
-    public int $place_id;
+    public int $municipality_id;
     public string $status;
     public string $created_at;
     public string $updated_at;
@@ -31,7 +31,8 @@ class UserDTO
         string $birth_date,
         string $phone,
         string $email,
-        string $password
+        string $password,
+        int $municipality_id
     ) {
         $this->first_name = $first_name;
         $this->last_name = $last_name;
@@ -43,5 +44,6 @@ class UserDTO
         $this->phone = $phone;
         $this->email = $email;
         $this->password = $password;
+        $this->municipality_id = $municipality_id;
     }
 }

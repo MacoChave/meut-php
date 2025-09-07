@@ -1,3 +1,5 @@
 public/dist
 /vendor/
 .env
+
+storage/logs/*.log
