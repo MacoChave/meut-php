@@ -1,15 +1,19 @@
 <script setup lang="ts">
+	import Appbar from '@/components/Appbar.vue';
 	import Footer from '@/components/Footer.vue';
-	import Appbar from '../components/Appbar.vue';
+	import Drawer from '../components/Drawer.vue';
 </script>
 
 <template>
-	<v-layout class="min-h-dvh">
+	<v-layout class="w-dvw h-dvh">
 		<!-- Appbar -->
-		<Appbar class="bg-primary-950" />
+		<Appbar />
+
+		<!-- Navbar -->
+		<Drawer />
 
 		<!-- Main content -->
-		<v-main class="flex flex-col content-center container mx-auto">
+		<v-main class="flex flex-col">
 			<div class="flex-1">
 				<slot />
 			</div>

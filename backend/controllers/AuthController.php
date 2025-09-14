@@ -6,6 +6,7 @@ use DTO\LoginDTO;
 use DTO\ResponseDTO;
 use DTO\UserDTO;
 use Helpers\Log;
+use Helpers\Response;
 use Services\AuthService;
 
 class AuthController
@@ -17,7 +18,7 @@ class AuthController
         $this->authService = new AuthService();
     }
 
-    public function login(): void
+    public function login()
     {
         $data = json_decode(file_get_contents('php://input'), true) ?? [];
 
@@ -40,10 +41,10 @@ class AuthController
 
         $loginResponse = $this->authService->login($dto);
 
-        $this->sendResponse($loginResponse->status, $loginResponse->data, $loginResponse->error);
+        Response::jsonResponse($loginResponse->status, $loginResponse->data, $loginResponse->error);
     }
 
-    public function logup(): void
+    public function logup()
     {
         $data = json_decode(file_get_contents('php://input'), true) ?? [];
 
@@ -65,15 +66,6 @@ class AuthController
 
         $response = $this->authService->logup($dto, $data['rol'] ?? 6);
 
-        Log::info(json_encode($response));
-
-        $this->sendResponse($response->status, $response->data, $response->error);
-    }
-
-    private function sendResponse(int $status, $data = null, ?string $error = null): void
-    {
-        http_response_code($status);
-        header('Content-Type: application/json');
-        echo json_encode(new ResponseDTO($status, $data, $error));
+        Response::jsonResponse($response->status, $response->data, $response->error);
     }
 }

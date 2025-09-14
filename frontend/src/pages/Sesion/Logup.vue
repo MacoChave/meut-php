@@ -1,147 +1,5 @@
-<template>
-	<MainLayout>
-		<div class="flex flex-col items-center justify-center h-full bg-white">
-			<h1 class="text-2xl font-semibold mb-6">Registro de usuario</h1>
-
-			<StepForm :steps="steps" v-model="formData" @submit="handleSubmit">
-				<!-- Paso 1 -->
-				<!-- @ts-ignore -->
-				<template #step-0="{ formData }">
-					<FormControl
-						v-model="formData.firstName"
-						type="text"
-						id="firstName"
-						label="Nombres"
-						placeholder="Ingrese sus nombres"
-						prependIcon="mdi-account" />
-					<FormControl
-						v-model="formData.lastName"
-						type="text"
-						id="lastName"
-						label="Apellidos"
-						placeholder="Ingrese sus apellidos"
-						prependIcon="mdi-account" />
-					<FormControl
-						v-model="formData.gender"
-						type="select"
-						id="gender"
-						label="Genero"
-						placeholder="Seleccione su género"
-						:options="[
-							{ label: 'Masculino', value: 'M' },
-							{ label: 'Femenino', value: 'F' },
-						]"
-						prependIcon="mdi-account" />
-					<FormControl
-						v-model="formData.bornDate"
-						type="date"
-						id="bornDate"
-						label="Fecha de nacimiento"
-						placeholder="Seleccione su fecha de nacimiento" />
-				</template>
-
-				<!-- Paso 2 -->
-				<!-- @ts-ignore -->
-				<template #step-1="{ formData }">
-					<FormControl
-						v-model="formData.userRegister"
-						type="text"
-						id="userRegister"
-						label="Registro universitario"
-						placeholder="Ingrese el registro universitario"
-						prependIcon="mdi-id-card" />
-					<FormControl
-						v-model="formData.userIdentification"
-						type="text"
-						id="userIdentification"
-						label="Código único de identificación"
-						placeholder="Ingrese su código único de identificación (CUI)"
-						prependIcon="mdi-id-card" />
-					<FormControl
-						v-model="formData.phone"
-						type="text"
-						id="phone"
-						label="Teléfono"
-						placeholder="Ingrese su número de teléfono"
-						prependIcon="mdi-phone" />
-					<FormControl
-						v-model="formData.department"
-						type="select"
-						label="Departamento *"
-						placeholder="Seleccione un departamento"
-						:options="departmentOptions"
-						:loading="loadingDepartment"
-						:disabled="loadingDepartment"
-						:rules="[(v) => !!v || 'Departamento es obligarorio']"
-						required
-						@change="onDepartmentChange"
-						prependIcon="mdi-home" />
-					<FormControl
-						v-model="formData.municipality"
-						type="select"
-						label="Municipalidad *"
-						placeholder="Seleccione una municipalidad"
-						:options="municipalityOptions"
-						:loading="loadingMunicipality"
-						:disabled="loadingMunicipality"
-						:rules="[(v) => !!v || 'Municipio es obligarorio']"
-						required
-						prependIcon="mdi-city" />
-					<FormControl
-						v-model="formData.userAddress"
-						type="textarea"
-						id="userAddress"
-						label="Dirección"
-						placeholder="Complemente su dirección de residencia"
-						:options="municipalityOptions"
-						prependIcon="mdi-map-marker" />
-				</template>
-
-				<!-- Paso 3 -->
-				<!-- @ts-ignore -->
-				<template #step-2="{ formData }">
-					<FormControl
-						v-model="formData.email"
-						type="email"
-						id="email"
-						label="Correo electrónico"
-						placeholder="Ingrese su correo electrónico"
-						prependIcon="mdi-email" />
-					<FormControl
-						v-model="formData.password"
-						type="password"
-						id="password"
-						label="Contraseña"
-						placeholder="Ingrese su contraseña"
-						prependIcon="mdi-lock" />
-					<FormControl
-						v-model="formData.confirmPassword"
-						type="password"
-						id="confirmPassword"
-						label="Confirmar contraseña"
-						placeholder="Confirme su contraseña"
-						prependIcon="mdi-lock"
-						:rules="[
-							(v) =>
-								!!v ||
-								'Confirmación de contraseña es obligarorio',
-						]" />
-				</template>
-			</StepForm>
-
-			<p class="mt-4 text-sm text-gray-600">
-				¿Ya tienes una cuenta?
-				<a href="/login" class="text-blue-500 hover:underline"
-					>Inicia sesión aquí</a
-				>
-			</p>
-		</div>
-	</MainLayout>
-</template>
-
 <script setup lang="ts">
 	import StepForm from '@/components/StepForm.vue';
-	import MainLayout from '@/layouts/MainLayout.vue';
 	import Swal from 'sweetalert2';
 	import { computed, onMounted, ref } from 'vue';
 	import FormControl from '../../components/FormControl.vue';
@@ -331,5 +189,143 @@
 		}
 	};
 </script>
+
+<template>
+	<div class="flex flex-col items-center justify-center h-full bg-white">
+		<h1 class="text-2xl font-semibold mb-6">Registro de usuario</h1>
+
+		<StepForm :steps="steps" v-model="formData" @submit="handleSubmit">
+			<!-- Paso 1 -->
+			<!-- @ts-ignore -->
+			<template #step-0="{ formData }">
+				<FormControl
+					v-model="formData.firstName"
+					type="text"
+					id="firstName"
+					label="Nombres"
+					placeholder="Ingrese sus nombres"
+					prependIcon="mdi-account" />
+				<FormControl
+					v-model="formData.lastName"
+					type="text"
+					id="lastName"
+					label="Apellidos"
+					placeholder="Ingrese sus apellidos"
+					prependIcon="mdi-account" />
+				<FormControl
+					v-model="formData.gender"
+					type="select"
+					id="gender"
+					label="Genero"
+					placeholder="Seleccione su género"
+					:options="[
+						{ label: 'Masculino', value: 'M' },
+						{ label: 'Femenino', value: 'F' },
+					]"
+					prependIcon="mdi-account" />
+				<FormControl
+					v-model="formData.bornDate"
+					type="date"
+					id="bornDate"
+					label="Fecha de nacimiento"
+					placeholder="Seleccione su fecha de nacimiento" />
+			</template>
+
+			<!-- Paso 2 -->
+			<!-- @ts-ignore -->
+			<template #step-1="{ formData }">
+				<FormControl
+					v-model="formData.userRegister"
+					type="text"
+					id="userRegister"
+					label="Registro universitario"
+					placeholder="Ingrese el registro universitario"
+					prependIcon="mdi-id-card" />
+				<FormControl
+					v-model="formData.userIdentification"
+					type="text"
+					id="userIdentification"
+					label="Código único de identificación"
+					placeholder="Ingrese su código único de identificación (CUI)"
+					prependIcon="mdi-id-card" />
+				<FormControl
+					v-model="formData.phone"
+					type="text"
+					id="phone"
+					label="Teléfono"
+					placeholder="Ingrese su número de teléfono"
+					prependIcon="mdi-phone" />
+				<FormControl
+					v-model="formData.department"
+					type="select"
+					label="Departamento *"
+					placeholder="Seleccione un departamento"
+					:options="departmentOptions"
+					:loading="loadingDepartment"
+					:disabled="loadingDepartment"
+					:rules="[(v) => !!v || 'Departamento es obligarorio']"
+					required
+					@change="onDepartmentChange"
+					prependIcon="mdi-home" />
+				<FormControl
+					v-model="formData.municipality"
+					type="select"
+					label="Municipalidad *"
+					placeholder="Seleccione una municipalidad"
+					:options="municipalityOptions"
+					:loading="loadingMunicipality"
+					:disabled="loadingMunicipality"
+					:rules="[(v) => !!v || 'Municipio es obligarorio']"
+					required
+					prependIcon="mdi-city" />
+				<FormControl
+					v-model="formData.userAddress"
+					type="textarea"
+					id="userAddress"
+					label="Dirección"
+					placeholder="Complemente su dirección de residencia"
+					:options="municipalityOptions"
+					prependIcon="mdi-map-marker" />
+			</template>
+
+			<!-- Paso 3 -->
+			<!-- @ts-ignore -->
+			<template #step-2="{ formData }">
+				<FormControl
+					v-model="formData.email"
+					type="email"
+					id="email"
+					label="Correo electrónico"
+					placeholder="Ingrese su correo electrónico"
+					prependIcon="mdi-email" />
+				<FormControl
+					v-model="formData.password"
+					type="password"
+					id="password"
+					label="Contraseña"
+					placeholder="Ingrese su contraseña"
+					prependIcon="mdi-lock" />
+				<FormControl
+					v-model="formData.confirmPassword"
+					type="password"
+					id="confirmPassword"
+					label="Confirmar contraseña"
+					placeholder="Confirme su contraseña"
+					prependIcon="mdi-lock"
+					:rules="[
+						(v) =>
+							!!v || 'Confirmación de contraseña es obligarorio',
+					]" />
+			</template>
+		</StepForm>
+
+		<p class="mt-4 text-sm text-gray-600">
+			¿Ya tienes una cuenta?
+			<a href="/login" class="text-blue-500 hover:underline"
+				>Inicia sesión aquí</a
+			>
+		</p>
+	</div>
+</template>
 
 <style></style>

@@ -2,6 +2,7 @@
 
 use Controllers\AuthController;
 use Controllers\LocationController;
+use Controllers\PageController;
 use Controllers\StatusController;
 use Controllers\UserController;
 use Core\Router;
@@ -16,13 +17,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit;
 }
 
+$router->add('GET', '/api/status', [StatusController::class, 'getStatus']);
+$router->add('GET', '/api/status/db', [StatusController::class, 'getDbStatus']);
+
 $router->add('POST', '/api/login', [AuthController::class, 'login']);
 $router->add('POST', '/api/logup', [AuthController::class, 'logup']);
 
 $router->add('GET', '/api/location/departments', [LocationController::class, 'getDepartments']);
 $router->add('GET', '/api/location/departments/{id_department}/municipality', [LocationController::class, 'getMunicipalities']);
 
-$router->add('GET', '/api/status', [StatusController::class, 'getStatus']);
-$router->add('GET', '/api/status/db', [StatusController::class, 'getDbStatus']);
+$router->add('GET', '/api/page', [PageController::class, 'getAll']);
+$router->add('GET', '/api/page/permissions', [PageController::class, 'getPagesWithPermissions']);
 
 $router->add('GET', '/api/users/{id}', [UserController::class, 'getUserById']);

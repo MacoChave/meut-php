@@ -1,0 +1,1 @@
+<template>Curso works!</template>
