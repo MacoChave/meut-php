@@ -1,0 +1,1 @@
+<template>Jornada works</template>

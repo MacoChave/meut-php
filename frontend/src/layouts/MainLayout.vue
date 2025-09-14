@@ -1,19 +1,21 @@
+<script setup lang="ts">
+	import Footer from '@/components/Footer.vue';
+	import Appbar from '../components/Appbar.vue';
+</script>
+
 <template>
-	<div class="flex flex-col min-h-dvh">
-		<!-- Navbar -->
-		<Navbar class="bg-primary-950" />
+	<v-layout class="min-h-dvh">
+		<!-- Appbar -->
+		<Appbar class="bg-primary-950" />
 
 		<!-- Main content -->
-		<main class="flex-1 content-center container mx-auto">
-			<slot />
-		</main>
+		<v-main class="flex flex-col content-center container mx-auto">
+			<div class="flex-1">
+				<slot />
+			</div>
 
-		<!-- Footer -->
-		<Footer />
-	</div>
+			<!-- Footer -->
+			<Footer class="flex-0" />
+		</v-main>
+	</v-layout>
 </template>
-
-<script setup lang="ts">
-	import Navbar from '@/components/Navbar.vue';
-	import Footer from '@/components/Footer.vue';
-</script>

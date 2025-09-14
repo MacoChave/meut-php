@@ -1,0 +1,1 @@
+<template>Constanstes works</template>

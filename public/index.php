@@ -1,57 +1,47 @@
 <?php
-require __DIR__ . '/../vendor/autoload.php';
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/..');
-$dotenv->load();
-require __DIR__ . '/../helpers/vite.php';
+// require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/../backend/config/bootstrap.php';
 
-$manifest = json_decode(file_get_contents(__DIR__ . '/dist/.vite/manifest.json'), true);
-$entry = $manifest['src/main.ts'];
-$jsFile = $entry['file'] ?? 'app.js';
-$cssFile = $entry['css'][0] ?? null;
+use Core\Router;
 
-echo '<!-- ' . json_encode($manifest) . ' -->';
+$router = new Router();
 
-$articulos = [
-    ["id" => 1, "nombre" => "Artículo 1", "precio" => 10.00],
-    ["id" => 2, "nombre" => "Artículo 2", "precio" => 15.50],
-    ["id" => 3, "nombre" => "Artículo 3", "precio" => 7.25],
-    ["id" => 4, "nombre" => "Artículo 4", "precio" => 12.30],
-    ["id" => 5, "nombre" => "Artículo 5", "precio" => 9.99]
-];
-?>
+require_once __DIR__ . '/../backend/routes/api.php';
 
-<!DOCTYPE html>
-<html lang="es" translate="no">
+// Obtener ruta solicitada
+$uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+$method = $_SERVER['REQUEST_METHOD'];
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PHP + Vue SSR Simulado</title>
-    <!-- <link rel="stylesheet" href="/dist/<?php echo $cssFile ?>"> -->
-    <?php echo vite('src/main.ts') ?>
-</head>
+// Si la ruta empieza con /api -> procesamos backend
+if (strpos($uri, '/api') === 0) {
+    $router->dispatch($uri, $method);
+    exit;
+}
 
-<body class="">
-    <div id="app">
-        <h1 class="text-xl font-bold">Contenido desde PHP</h1>
-        <ul class="list-disc ml-6">
-            <?php foreach ($articulos as $articulo): ?>
-                <li>
-                    <strong>
-                        <?
-                        htmlspecialchars($articulo['nombre'], ENT_QUOTES, 'UTF-8');
-                        ?>
-                    </strong>
-                    <?
-                    htmlspecialchars($articulo['precio'], ENT_QUOTES, 'UTF-8');
-                    ?>
-                </li>
-            <?php endforeach; ?>
-        </ul>
-        <!-- Aquí Vue hidrata encima -->
-    </div>
+// FRONTEND
+if ($appEnv === 'development') {
+    // En desarrollo, redirigimos al servidor de Vite
+    $viteUrl = $viteHost . $uri;
+    header("Location: $viteUrl");
+    exit;
+} else {
+    // En producción, servimos los archivos estáticos desde 'public/dist/index.html'
+    $distDir = __DIR__ . '/dist';
+    $requestedFile = realpath($distDir . $uri);
 
-    <!-- <script type="module" src="/dist/<?php echo $jsFile ?>"></script> -->
-</body>
+    // Si el archivo existe (ej: /assets/main.js), lo servimos directamente
+    if ($requestedFile && strpos($requestedFile, realpath($distDir)) === 0 && is_file($requestedFile)) {
+        return readfile($requestedFile);
+    }
 
-</html>
+    // Si no existe, devolvemos index.html (SPA fallback)
+    $indexFile = $distDir . '/index.html';
+    if (file_exists($indexFile)) {
+        header('Content-Type: text/html; charset=utf-8');
+        readfile($indexFile);
+        exit;
+    }
+
+    http_response_code(404);
+    echo "Archivo no encontrado.";
+}

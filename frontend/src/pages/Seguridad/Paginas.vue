@@ -1,0 +1,1 @@
+<template>Paginas works</template>
