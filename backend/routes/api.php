@@ -28,5 +28,7 @@ $router->add('GET', '/api/location/departments/{id_department}/municipality', [L
 
 $router->add('GET', '/api/page', [PageController::class, 'getAll']);
 $router->add('GET', '/api/page/permissions', [PageController::class, 'getPagesWithPermissions']);
+$router->add('POST', '/api/page/permissions/users', [PageController::class, 'getPermissionsByUsers']);
+$router->add('POST', '/api/page/permissions/role', [PageController::class, 'getPermissionsByRole']);
 
 $router->add('GET', '/api/users/{id}', [UserController::class, 'getUserById']);

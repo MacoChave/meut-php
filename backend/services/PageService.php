@@ -65,4 +65,30 @@ class PageService
             return new ResponseDTO(500, null, 'Hubo un error al procesar la solicitud');
         }
     }
+
+    public function getPermissionsByUsers(?string $username, ?string $email): ResponseDTO
+    {
+        try {
+            $result = PageRepository::getPermissionsByUsers($username, $email);
+
+            if (!$result) return new ResponseDTO(404, null, 'No se encontraron permisos para el usuario');
+
+            return new ResponseDTO(200, $result, null);
+        } catch (\Exception $ex) {
+            return new ResponseDTO(500, null, $ex->getMessage() ?? 'Hubo un error al procesar la solicitud');
+        }
+    }
+
+    public function getPermissionsByRoles(?string $rol): ResponseDTO
+    {
+        try {
+            $result = PageRepository::getPermissionsByRoles($rol);
+
+            if (!$result) return new ResponseDTO(404, null, 'No se encontraron permisos para el rol');
+
+            return new ResponseDTO(200, $result, null);
+        } catch (\Exception $ex) {
+            return new ResponseDTO(500, null, $ex->getMessage() ?? 'Hubo un error al procesar la solicitud');
+        }
+    }
 }

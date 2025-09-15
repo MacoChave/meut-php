@@ -65,4 +65,22 @@ class PageController
 
         Response::jsonResponse($pages->status, $pages->data, $pages->error);
     }
+
+    public function getPermissionsByUsers()
+    {
+        $body = file_get_contents('php://input');
+        $data = json_decode($body, true);
+        $pages = $this->pageService->getPermissionsByUsers($data['username'], $data['email']);
+
+        Response::jsonResponse($pages->status, $pages->data, $pages->error);
+    }
+
+    public function getPermissionsByRole()
+    {
+        $body = file_get_contents('php://input');
+        $data = json_decode($body, true);
+        $pages = $this->pageService->getPermissionsByRoles($data['rol']);
+
+        Response::jsonResponse($pages->status, $pages->data, $pages->error);
+    }
 }
