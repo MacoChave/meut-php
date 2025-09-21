@@ -1,17 +1,23 @@
 <script lang="ts" setup>
-	import { computed } from 'vue';
-	import type { PermissionResponse } from '../../models/PermissionResponse';
-	import useFetchRolePermissions from '../../services/useFetchRolePermissions';
+	import { computed, ref } from 'vue';
+	import type { PagePermissionResponse } from '../../models/PagePermissionResponse';
+	import useFetch from '../../services/useFetch';
+	import PermissionModal from './components/PermissionModal.vue';
+	import PermissionTable from './components/PermissionTable.vue';
 
-	const { loading, error, data: perms } = useFetchRolePermissions();
+	const { data, error, loading, fetchData } = useFetch<
+		PagePermissionResponse[]
+	>('page/permissions/role', {}, true);
+	const showModal = ref(false);
+	const editingPermission = ref<PagePermissionResponse | null>(null);
 
 	const groupedPerms = computed(() => {
-		if (!perms.value) return [];
+		if (!data.value) return [];
 
-		return perms.value.reduce(
+		return data.value.reduce(
 			(
-				acc: Record<string, PermissionResponse[]>,
-				item: PermissionResponse
+				acc: Record<string, PagePermissionResponse[]>,
+				item: PagePermissionResponse
 			) => {
 				if (!acc[item.nombre_padre]) acc[item.nombre_padre] = [];
 
@@ -22,13 +28,39 @@
 		);
 	});
 
-	const edit = (item: PermissionResponse) => {
-		console.log('Edit', item);
+	const headers = [
+		{ text: 'Página', value: 'nombre_hijo' },
+		{ text: 'Rol', value: 'rol' },
+		{ text: 'Permisos', value: 'permisos' },
+		{ text: 'Acciones', value: 'actions', sortable: false },
+	];
+
+	const openCreateModal = () => {
+		editingPermission.value = null;
+		showModal.value = true;
+	};
+
+	const openEditModal = (item: PagePermissionResponse) => {
+		editingPermission.value = { ...item };
+		showModal.value = true;
+	};
+
+	const closeModal = () => {
+		showModal.value = false;
+		editingPermission.value = null;
+	};
+
+	const handleSave = (perm: PagePermissionResponse) => {
+		if (perm.id_hijo) {
+			console.log('Editando permiso:', perm);
+		} else {
+			console.log('Creando permiso:', perm);
+		}
 	};
 </script>
 
 <template>
-	<div class="w-full mx-auto md:w-2xl">
+	<div class="md:px-20">
 		<div class="my-8">
 			<h1 class="text-3xl font-bold text-slate-900 tracking-tight">
 				Permisos por rol
@@ -43,48 +75,30 @@
 				v-for="(items, parentName) in groupedPerms"
 				color="primary"
 				:key="parentName">
-				<v-expansion-panel-title>{{
-					parentName
-				}}</v-expansion-panel-title>
+				<v-expansion-panel-title
+					>{{ parentName }}
+				</v-expansion-panel-title>
 
 				<v-expansion-panel-text>
-					<v-table height="100%" fixed-header>
-						<thead>
-							<tr>
-								<th class="text-left">Página</th>
-								<th class="text-left">Rol</th>
-								<th class="text-left">Permisos</th>
-								<th class="text-left"></th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr v-for="item in items" :key="item.id_hijo">
-								<td>{{ item.nombre_hijo }}</td>
-								<td>{{ item.rol }}</td>
-								<td>
-									<span
-										v-for="perm in JSON.parse(
-											item.permisos
-										)"
-										:key="perm"
-										class="mr-2">
-										<v-chip small color="primary">
-											{{ perm }}
-										</v-chip>
-									</span>
-								</td>
-								<td>
-									<v-btn
-										variant="flat"
-										icon="mdi-pencil"
-										@click="edit(item)">
-									</v-btn>
-								</td>
-							</tr>
-						</tbody>
-					</v-table>
+					<PermissionTable
+						:items="items"
+						:headers="headers"
+						@edit="openEditModal" />
 				</v-expansion-panel-text>
 			</v-expansion-panel>
 		</v-expansion-panels>
 	</div>
+
+	<v-fab
+		color="primary"
+		icon="mdi-plus"
+		:app="true"
+		location="right bottom"
+		@click="openCreateModal()">
+	</v-fab>
+
+	<PermissionModal
+		v-model="showModal"
+		:permission="editingPermission"
+		@save="handleSave" />
 </template>

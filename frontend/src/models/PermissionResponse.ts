@@ -1,8 +1,5 @@
 export interface PermissionResponse {
-	id_padre: number;
-	nombre_padre: string;
-	id_hijo: number;
-	nombre_hijo: string;
-	rol: string;
-	permisos: string;
+	id_permiso: number;
+	nombre: string;
+	descripcion: string;
 }

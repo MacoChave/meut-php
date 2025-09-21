@@ -15,31 +15,13 @@ class PageController
         $this->pageService = new PageService();
     }
 
-    public function getAll()
+    public function getAllChilds(array $params)
     {
-        $pages = $this->pageService->getPages();
+        $idParent = $params['idPage'] ?? null;
+
+        $pages = $this->pageService->getPagesByParent($idParent ? (int)$idParent : null);
 
         Response::jsonResponse($pages->status, $pages->data, $pages->error);
-    }
-
-    public function getOne()
-    {
-        Response::jsonResponse(200, null, 'Method not implemented');
-    }
-
-    public function create()
-    {
-        Response::jsonResponse(200, null, 'Method not implemented');
-    }
-
-    public function edit()
-    {
-        Response::jsonResponse(200, null, 'Method not implemented');
-    }
-
-    public function delete()
-    {
-        Response::jsonResponse(200, null, 'Method not implemented');
     }
 
     public function getPagesWithPermissions()
@@ -68,18 +50,21 @@ class PageController
 
     public function getPermissionsByUsers()
     {
+        $username = $_GET['username'] ?? null;
+        $email = $_GET['email'] ?? null;
         $body = file_get_contents('php://input');
         $data = json_decode($body, true);
-        $pages = $this->pageService->getPermissionsByUsers($data['username'], $data['email']);
+        $pages = $this->pageService->getPermissionsByUsers($username, $email);
 
         Response::jsonResponse($pages->status, $pages->data, $pages->error);
     }
 
     public function getPermissionsByRole()
     {
+        $rol = $_GET['rol'] ?? null;
         $body = file_get_contents('php://input');
         $data = json_decode($body, true);
-        $pages = $this->pageService->getPermissionsByRoles($data['rol']);
+        $pages = $this->pageService->getPermissionsByRoles($rol);
 
         Response::jsonResponse($pages->status, $pages->data, $pages->error);
     }

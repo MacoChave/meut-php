@@ -3,6 +3,8 @@
 use Controllers\AuthController;
 use Controllers\LocationController;
 use Controllers\PageController;
+use Controllers\PermissionController;
+use Controllers\RolController;
 use Controllers\StatusController;
 use Controllers\UserController;
 use Core\Router;
@@ -26,9 +28,12 @@ $router->add('POST', '/api/logup', [AuthController::class, 'logup']);
 $router->add('GET', '/api/location/departments', [LocationController::class, 'getDepartments']);
 $router->add('GET', '/api/location/departments/{id_department}/municipality', [LocationController::class, 'getMunicipalities']);
 
-$router->add('GET', '/api/page', [PageController::class, 'getAll']);
-$router->add('GET', '/api/page/permissions', [PageController::class, 'getPagesWithPermissions']);
-$router->add('POST', '/api/page/permissions/users', [PageController::class, 'getPermissionsByUsers']);
-$router->add('POST', '/api/page/permissions/role', [PageController::class, 'getPermissionsByRole']);
+$router->add('GET', '/api/rol', [RolController::class, 'getAll']);
+
+$router->add('GET', '/api/permission', [PermissionController::class, 'getAll']);
+
+$router->add('GET', '/api/page/{idPage}', [PageController::class, 'getAllChilds']);
+$router->add('GET', '/api/page/permissions/users', [PageController::class, 'getPermissionsByUsers']);
+$router->add('GET', '/api/page/permissions/role', [PageController::class, 'getPermissionsByRole']);
 
 $router->add('GET', '/api/users/{id}', [UserController::class, 'getUserById']);

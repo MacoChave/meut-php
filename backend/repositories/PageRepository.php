@@ -9,22 +9,35 @@ use PDOException;
 
 class PageRepository
 {
-    public static function getAll()
+    /**
+     * Obtiene las páginas hijas de un padre específico o null en caso de ser padre.
+     */
+    public static function getPagesByParent(?int $idParent)
     {
         try {
             $pdo = require __DIR__ . '/../config/database.php';
 
-            $stmt = $pdo->prepare('SELECT * FROM ut_pagina');
+            if ($idParent === null) {
+                $stmt = $pdo->prepare('SELECT * FROM ut_pagina WHERE id_padre IS NULL;');
+            } else {
+                $stmt = $pdo->prepare('SELECT * FROM ut_pagina WHERE id_padre = :idParent;');
+                $stmt->bindParam(':idParent', $idParent, PDO::PARAM_INT);
+            }
+
             $stmt->execute();
 
             $pages = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
             return $pages;
         } catch (PDOException $ex) {
-            Log::error($ex->getMessage(), ['class' => 'PageRepository', 'method' => 'getAll']);
-            throw new Exception("Error al obtener las páginas", 1);
+            Log::error($ex->getMessage(), ['class' => 'PageRepository', 'method' => 'getPagesByParent']);
+            throw new Exception("Error al obtener las páginas por padre", 1);
         }
     }
 
+    /**
+     * Obtiene las páginas con permisos para un usuario específico.
+     */
     public static function getPagesWithPermissions(int $idUser)
     {
         try {
@@ -53,6 +66,9 @@ class PageRepository
         }
     }
 
+    /**
+     * Obtiene los permisos por usuario (nombre de usuario o correo electrónico).
+     */
     public static function getPermissionsByUsers(?string $username, ?string $email)
     {
         try {
@@ -81,6 +97,9 @@ class PageRepository
         }
     }
 
+    /**
+     * Obtiene los permisos por rol.
+     */
     public static function getPermissionsByRoles(?string $rol)
     {
         try {

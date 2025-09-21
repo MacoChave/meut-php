@@ -8,15 +8,16 @@ use Repositories\PageRepository;
 
 class PageService
 {
-    public function getPages(): ResponseDTO
+    public function getPagesByParent(?int $idParent): ResponseDTO
     {
         try {
-            $result = PageRepository::getAll();
+            $result = PageRepository::getPagesByParent($idParent);
 
             if (!$result) return new ResponseDTO(404, null, 'No se encontraron páginas');
 
             return new ResponseDTO(200, $result, null);
         } catch (\Exception $th) {
+            Log::error($th->getMessage(), ['class' => 'PageService', 'method' => 'getPagesByParent']);
             return new ResponseDTO(500, null, 'Hubo un error al procesar la solicitud');
         }
     }

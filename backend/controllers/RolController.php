@@ -3,19 +3,21 @@
 namespace Controllers;
 
 use Helpers\Response;
+use Services\RolService;
 
-class Rol
+class RolController
 {
-    // private PaginaService $paginaService;
+    private RolService $paginaService;
 
     public function __construct()
     {
-        // $this->paginaService = new PaginaService();
+        $this->paginaService = new RolService();
     }
 
     public function getAll()
     {
-        Response::jsonResponse(200, null, 'Method not implemented');
+        $roles = $this->paginaService->getAllRoles();
+        Response::jsonResponse($roles->status, $roles->data, $roles->error);
     }
 
     public function getOne()
