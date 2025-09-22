@@ -75,7 +75,7 @@ class PageRepository
             $pdo = require __DIR__ . '/../config/database.php';
 
             $stmt = $pdo->prepare('
-                CALL ut_sp_get_user_permissions(
+                CALL ut_sp_vw_get_user_permissions(
                     :vista, :idUser
                     , :rol, :usuario, :correo 
                 );
@@ -106,7 +106,7 @@ class PageRepository
             $pdo = require __DIR__ . '/../config/database.php';
 
             $stmt = $pdo->prepare('
-                CALL ut_sp_get_user_permissions(
+                CALL ut_sp_vw_get_user_permissions(
                     :vista, :idUser
                     , :rol, :usuario, :correo 
                 );

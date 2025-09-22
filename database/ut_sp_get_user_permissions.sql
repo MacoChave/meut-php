@@ -1,7 +1,7 @@
 /*
 * Procedimiento para obtener los permisos por usuario
 */
-CREATE PROCEDURE ut_sp_get_user_permissions (
+CREATE PROCEDURE ut_sp_vw_get_user_permissions (
     IN p_vista VARCHAR(3),
     IN p_user_id INT,
     IN p_rol VARCHAR(45),
@@ -13,8 +13,11 @@ BEGIN
         -- Permisos por roles
         SELECT padre.id_pagina id_padre , padre.nombre nombre_padre
             , hijo.id_pagina id_hijo , hijo.nombre nombre_hijo 
-            , r.nombre rol 
-            , JSON_ARRAYAGG(p.nombre) AS permisos
+            , r.id_rol , r.nombre rol 
+            , JSON_ARRAYAGG(JSON_OBJECT(
+            		'id_permiso', p.id_permiso,
+            		'nombre', p.nombre
+            )) AS permisos
         FROM usuario_rol ur 
         JOIN ut_permiso_rol_pagina uprp ON ur.id_rol = uprp.id_rol 
         JOIN rol r ON uprp.id_rol  = r.id_rol
@@ -22,16 +25,19 @@ BEGIN
         JOIN ut_pagina hijo ON uprp.id_pagina = hijo.id_pagina
         JOIN ut_pagina padre ON hijo.id_padre = padre.id_pagina
         WHERE uprp.activo = 1
-        AND (p_rol IS NULL OR r.nombre LIKE CONCAT('%', ISNULL(p_rol, ''), '%'))
+        AND (p_rol IS NULL OR r.nombre LIKE CONCAT('%', IFNULL(p_rol, ''), '%'))
         GROUP BY padre.id_pagina , padre.nombre 
             , hijo.id_pagina , hijo.nombre 
-            , r.nombre;
+            , r.id_rol , r.nombre;
     ELSEIF p_vista = 'U' THEN 
         -- Permisos directos por usuarios
         SELECT padre.id_pagina id_padre , padre.nombre nombre_padre
             , hijo.id_pagina id_hijo , hijo.nombre nombre_hijo 
             , CONCAT(u.apellidos , ' , ' , u.nombre) usuario , u.correo
-            , JSON_ARRAYAGG(p.nombre) permisos 
+            , JSON_ARRAYAGG(JSON_OBJECT(
+            		'id_permiso', p.id_permiso,
+            		'nombre', p.nombre
+            )) AS permisos
         FROM ut_permiso_user_pagina upup 
         JOIN usuario u ON upup.id_usuario = u.id_usuario
         JOIN ut_permiso p ON upup.id_permiso = p.id_permiso 

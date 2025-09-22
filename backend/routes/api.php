@@ -31,6 +31,7 @@ $router->add('GET', '/api/location/departments/{id_department}/municipality', [L
 $router->add('GET', '/api/rol', [RolController::class, 'getAll']);
 
 $router->add('GET', '/api/permission', [PermissionController::class, 'getAll']);
+$router->add('POST', '/api/permission/{idPagina}/role/{idRol}', [PermissionController::class, 'savePermissionsByRole']);
 
 $router->add('GET', '/api/page/{idPage}', [PageController::class, 'getAllChilds']);
 $router->add('GET', '/api/page/permissions/users', [PageController::class, 'getPermissionsByUsers']);

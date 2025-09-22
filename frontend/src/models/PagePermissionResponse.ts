@@ -1,4 +1,5 @@
 export interface PagePermissionResponse {
+	id_rol: any;
 	id_padre?: number;
 	nombre_padre?: string;
 	id_hijo?: number;

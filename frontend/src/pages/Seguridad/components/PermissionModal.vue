@@ -92,6 +92,7 @@
 						id_hijo: undefined,
 						nombre_hijo: undefined,
 						rol: undefined,
+						id_rol: undefined,
 						permisos: [],
 				  };
 		},
@@ -124,6 +125,7 @@
 						:loading="loadingParent"
 						:rules="[(v) => !!v || 'La página padre es requerida']"
 						:disabled="!!props.permission"
+						:error-messages="errorParent"
 						required />
 					<v-select
 						v-model="localPermission.id_hijo"
@@ -136,6 +138,7 @@
 						:disabled="
 							!!props.permission || !localPermission.id_padre
 						"
+						:error-messages="errorChild"
 						required />
 					<v-select
 						v-model="localPermission.rol"
@@ -146,6 +149,7 @@
 						:loading="loadingRoles"
 						:rules="[(v) => !!v || 'El rol es requerido']"
 						:disabled="!!props.permission"
+						:error-messages="errorRoles"
 						required />
 					<v-select
 						v-model="localPermission.permisos"
@@ -161,6 +165,7 @@
 								(v && v.length > 0) ||
 								'Al menos un permiso es requerido',
 						]"
+						:error-messages="errorPermissions"
 						required />
 				</v-form>
 			</v-card-text>

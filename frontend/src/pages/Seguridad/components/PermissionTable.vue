@@ -21,13 +21,7 @@
 		item-key="id_hijo">
 		<template #item.permisos="{ item }">
 			<span v-for="perm in JSON.parse(item.permisos)" :key="perm">
-				<v-chip v-if="perm === 'ver'" small>{{ perm }}</v-chip>
-				<v-chip v-else-if="perm === 'crear'" small>{{ perm }}</v-chip>
-				<v-chip v-else-if="perm === 'editar'" small>{{ perm }}</v-chip>
-				<v-chip v-else-if="perm === 'eliminar'" small>{{
-					perm
-				}}</v-chip>
-				<v-chip v-else small>{{ perm }}</v-chip>
+				<v-chip small>{{ perm.nombre }}</v-chip>
 			</span>
 		</template>
 		<template #item.actions="{ item }">

@@ -4,6 +4,9 @@
 	import useFetch from '../../services/useFetch';
 	import PermissionModal from './components/PermissionModal.vue';
 	import PermissionTable from './components/PermissionTable.vue';
+	import { api } from '../../services/apiClient';
+	import { ApiResponse } from '../../models/ApiResponse';
+	import Swal from 'sweetalert2';
 
 	const { data, error, loading, fetchData } = useFetch<
 		PagePermissionResponse[]
@@ -45,17 +48,38 @@
 		showModal.value = true;
 	};
 
-	const closeModal = () => {
-		showModal.value = false;
-		editingPermission.value = null;
-	};
+	const handleSave = async (perm: PagePermissionResponse) => {
+		try {
+			const { data } = await api.post<ApiResponse<any>>(
+				`/permission/${perm.id_hijo}/role/${perm.rol}`,
+				{
+					permissions: perm.permisos,
+				}
+			);
 
-	const handleSave = (perm: PagePermissionResponse) => {
-		if (perm.id_hijo) {
-			console.log('Editando permiso:', perm);
-		} else {
-			console.log('Creando permiso:', perm);
-		}
+			if (data.status === 200) {
+				Swal.fire({
+					toast: true,
+					position: 'top-end',
+					showConfirmButton: false,
+					timer: 3000,
+					timerProgressBar: true,
+					icon: 'success',
+					title: 'Permisos actualizados correctamente',
+				});
+				fetchData();
+			} else {
+				Swal.fire({
+					toast: true,
+					position: 'top-end',
+					showConfirmButton: false,
+					timer: 3000,
+					timerProgressBar: true,
+					icon: 'error',
+					title: 'Error al actualizar los permisos',
+				});
+			}
+		} catch (err: any) {}
 	};
 </script>
 
