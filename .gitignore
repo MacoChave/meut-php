@@ -3,3 +3,4 @@ public/dist
 .env
 
 storage/logs/*.log
+templates/*.xlsx

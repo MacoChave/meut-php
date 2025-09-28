@@ -38,3 +38,4 @@ $router->add('GET', '/api/page/permissions/users', [PageController::class, 'getP
 $router->add('GET', '/api/page/permissions/role', [PageController::class, 'getPermissionsByRole']);
 
 $router->add('GET', '/api/users/{id}', [UserController::class, 'getUserById']);
+$router->add('GET', '/api/user/template', [UserController::class, 'getUserTemplate']);
