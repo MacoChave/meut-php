@@ -23,6 +23,17 @@ export default createVuetify({
 					warning: '#ffb7b7',
 				},
 			},
+			dark: {
+				colors: {
+					primary: '#00225b',
+					secondary: '#ff0000',
+					accent: '#447cff',
+					error: '#ff0000',
+					info: '#271343',
+					success: '#4bb543',
+					warning: '#ffb7b7',
+				},
+			},
 		},
 	},
 });

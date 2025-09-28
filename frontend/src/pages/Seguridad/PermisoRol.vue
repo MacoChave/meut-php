@@ -1,12 +1,15 @@
 <script lang="ts" setup>
-	import { computed, ref } from 'vue';
-	import type { PagePermissionResponse } from '../../models/PagePermissionResponse';
-	import useFetch from '../../services/useFetch';
-	import PermissionModal from './components/PermissionModal.vue';
-	import PermissionTable from './components/PermissionTable.vue';
-	import { api } from '../../services/apiClient';
-	import { ApiResponse } from '../../models/ApiResponse';
 	import Swal from 'sweetalert2';
+	import { computed, ref } from 'vue';
+	import type { ApiResponse } from '../../models/ApiResponse';
+	import type {
+		PagePermission,
+		PagePermissionResponse,
+	} from '../../models/PagePermissionResponse';
+	import { api } from '../../services/apiClient';
+	import useFetch from '../../services/useFetch';
+	import PermissionTable from './components/PermissionTable.vue';
+	import RolPermissionModal from './components/RolPermissionModal.vue';
 
 	const { data, error, loading, fetchData } = useFetch<
 		PagePermissionResponse[]
@@ -50,8 +53,19 @@
 
 	const handleSave = async (perm: PagePermissionResponse) => {
 		try {
+			if (perm.permisos) {
+				perm.permisos = perm.permisos.map(
+					(p: number | PagePermission) => {
+						if (typeof p !== 'number') {
+							return p.id_permiso;
+						}
+						return p;
+					}
+				);
+			}
+
 			const { data } = await api.post<ApiResponse<any>>(
-				`/permission/${perm.id_hijo}/role/${perm.rol}`,
+				`/permission/${perm.id_hijo}/role/${perm.id_rol}`,
 				{
 					permissions: perm.permisos,
 				}
@@ -79,7 +93,19 @@
 					title: 'Error al actualizar los permisos',
 				});
 			}
-		} catch (err: any) {}
+		} catch (err: any) {
+			Swal.fire({
+				toast: true,
+				position: 'top-end',
+				showConfirmButton: false,
+				timer: 3000,
+				timerProgressBar: true,
+				icon: 'error',
+				title:
+					err.response?.data?.message ||
+					'Error al actualizar los permisos',
+			});
+		}
 	};
 </script>
 
@@ -89,7 +115,7 @@
 			<h1 class="text-3xl font-bold text-slate-900 tracking-tight">
 				Permisos por rol
 			</h1>
-			<p class="text-slate-500mt-1">
+			<p class="text-slate-500 mt-1">
 				Gestión de permisos por cada rol y agrupador de páginas
 			</p>
 		</div>
@@ -118,10 +144,9 @@
 		icon="mdi-plus"
 		:app="true"
 		location="right bottom"
-		@click="openCreateModal()">
-	</v-fab>
+		@click="openCreateModal()" />
 
-	<PermissionModal
+	<RolPermissionModal
 		v-model="showModal"
 		:permission="editingPermission"
 		@save="handleSave" />

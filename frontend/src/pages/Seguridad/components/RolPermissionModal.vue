@@ -123,7 +123,7 @@
 						item-value="id_pagina"
 						item-title="nombre"
 						:loading="loadingParent"
-						:rules="[(v) => !!v || 'La página padre es requerida']"
+						:rules="[(v: any) => !!v || 'La página padre es requerida']"
 						:disabled="!!props.permission"
 						:error-messages="errorParent"
 						required />
@@ -134,20 +134,20 @@
 						item-value="id_pagina"
 						item-title="nombre"
 						:loading="loadingChild"
-						:rules="[(v) => !!v || 'La página hijo es requerida']"
+						:rules="[(v: any) => !!v || 'La página hijo es requerida']"
 						:disabled="
 							!!props.permission || !localPermission.id_padre
 						"
 						:error-messages="errorChild"
 						required />
 					<v-select
-						v-model="localPermission.rol"
+						v-model="localPermission.id_rol"
 						label="Rol"
 						:items="rolesData || []"
 						item-value="id_rol"
 						item-title="nombre"
 						:loading="loadingRoles"
-						:rules="[(v) => !!v || 'El rol es requerido']"
+						:rules="[(v: any) => !!v || 'El rol es requerido']"
 						:disabled="!!props.permission"
 						:error-messages="errorRoles"
 						required />
@@ -161,7 +161,7 @@
 						chips
 						:loading="loadingPermissions"
 						:rules="[
-							(v) =>
+							(v: string | any[]) =>
 								(v && v.length > 0) ||
 								'Al menos un permiso es requerido',
 						]"
@@ -171,10 +171,15 @@
 			</v-card-text>
 
 			<v-card-actions>
-				<v-btn text @click="emit('update:modelValue', false)"
+				<v-btn
+					variant="outlined"
+					color="primary"
+					@click="emit('update:modelValue', false)"
 					>Cancelar</v-btn
 				>
-				<v-btn color="primary" @click="save">Guardar</v-btn>
+				<v-btn variant="flat" color="primary" @click="save"
+					>Guardar</v-btn
+				>
 			</v-card-actions>
 		</v-card>
 	</v-dialog>

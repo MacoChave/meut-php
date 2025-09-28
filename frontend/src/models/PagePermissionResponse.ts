@@ -1,3 +1,8 @@
+export interface PagePermission {
+	id_permiso: number;
+	nombre: string;
+}
+
 export interface PagePermissionResponse {
 	id_rol: any;
 	id_padre?: number;
@@ -5,5 +10,5 @@ export interface PagePermissionResponse {
 	id_hijo?: number;
 	nombre_hijo?: string;
 	rol?: string;
-	permisos?: string;
+	permisos?: number[] | PagePermission[];
 }

@@ -49,4 +49,32 @@ class PermissionRepository
             throw new \Exception("Error al guardar los permisos por rol", 1);
         }
     }
+
+    /**
+     * Actualizar o guardar los permisos por usuario
+     */
+    public static function savePermissionsByUser($idUsuario, $permissions)
+    {
+        try {
+            $pdo = require __DIR__ . '/../config/database.php';
+
+            // Llamar al procedimiento ut_sp_m_usuario_permiso
+            $stmt = $pdo->prepare('CALL ut_sp_m_pagina_usuario(:id_pagina, :id_usuario, :permissions)');
+
+            $permissionJson = json_encode($permissions);
+
+            $stmt->bindParam(':id_pagina', $idPagina, PDO::PARAM_INT);
+            $stmt->bindParam(':id_usuario', $idUsuario, PDO::PARAM_INT);
+            $stmt->bindParam(':permissions', $permissionJson, PDO::PARAM_STR);
+
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $ex) {
+            if ($pdo->inTransaction()) {
+                $pdo->rollBack();
+            }
+            Log::error($ex->getMessage(), ['class' => 'PermissionRepository', 'method' => 'savePermissionsByUser']);
+            throw new \Exception("Error al guardar los permisos por usuario", 1);
+        }
+    }
 }

@@ -1,3 +1,17 @@
+<script setup lang="ts"></script>
+
 <template>
-	<h1>Usuario works!</h1>
+	<div class="md:px-20">
+		<div class="my-8">
+			<h1 class="text-3xl font-bold text-slate-900 tracking-tight">
+				Usuarios
+			</h1>
+			<p class="text-slate-500 mt-1">Gestión de usuarios del sistema</p>
+		</div>
+	</div>
+	<v-fab
+		color="primary"
+		icon="mdi-plus"
+		location="right bottom"
+		:app="true" />
 </template>
