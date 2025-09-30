@@ -13,7 +13,7 @@
 
 	const { data, error, loading, fetchData } = useFetch<
 		PagePermissionResponse[]
-	>('page/permissions/role', {}, true);
+	>('permission/role', {}, true);
 	const showModal = ref(false);
 	const editingPermission = ref<PagePermissionResponse | null>(null);
 

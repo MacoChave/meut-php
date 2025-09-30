@@ -15,6 +15,16 @@ use dev_meut;
 -- -------------------------------------------------
 -- 
 -- -------------------------------------------------
+-- CONSTANTS
+-- -------------------------------------------------
+create table if not exists ut_constants (
+	id_constant integer unsigned auto_increment primary key,
+	nombre varchar(50) not null,
+	valor varchar(255) not null,
+	descripcion varchar(255) null
+);
+
+-- -------------------------------------------------
 -- PROFILE MODULE
 -- -------------------------------------------------
 create table if not exists departamento (
@@ -234,23 +244,47 @@ create table if not exists ut_notificacion (
 
 create table if not exists ut_chat (
 	id_chat integer unsigned auto_increment primary key ,
-	miembros json , 
+	creador integer unsigned not null,
+	tipo enum('P', 'G') default 'P',
 	fecha_creacion datetime default now() , 
-	fecha_modificacion datetime default now() 
+	fecha_modificacion datetime default now() ,
+	constraint fk_chat_creador 
+		foreign key (creador)
+		references usuario(id_usuario) 
+) ; 
+
+create table if not exists ut_chat_miembro (
+	id_chat integer unsigned not null,
+	id_usuario integer unsigned not null,
+	rol enum('C', 'M') default 'M',
+	fecha_union datetime default now(),
+	fecha_salida datetime null,
+	primary key (id_chat, id_usuario),
+	constraint fk_cu_chat 
+		foreign key (id_chat)
+		references ut_chat(id_chat) 
+		on delete cascade,
+	constraint fk_cu_usuario
+		foreign key (id_usuario)
+		references usuario(id_usuario) 
+		on delete cascade
 ) ; 
 
 create table if not exists ut_message (
 	id_message integer unsigned auto_increment primary key ,
-	id_chat integer unsigned, 
-	autor integer , 
+	id_chat integer unsigned not null, 
+	autor integer unsigned not null, 
 	texto varchar(255) , 
-	estado char(1) default 'E' , 
+	estado enum('E', 'V') default 'E', -- [E] ENVIADO | [V] VISTO 
 	fecha_envio datetime default now(),
 	constraint fk_message_chat 
 		foreign key (id_chat)
 		references ut_chat(id_chat) 
-		on delete restrict 
-		on update cascade   
+		on delete cascade,
+	constraint fk_message_usuario 
+		foreign key (autor)
+		references usuario(id_usuario) 
+		on delete cascade
 ) ; 
 
 -- -------------------------------------------------

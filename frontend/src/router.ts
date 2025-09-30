@@ -58,7 +58,7 @@ const routes = [
 
 	// Seguridad Routes
 	{
-		path: '/seguridad/paginas',
+		path: '/seguridad/paginas/:PageId',
 		name: 'SeguridadPaginas',
 		component: () => import('./pages/Seguridad/Paginas.vue'),
 		meta: { layout: 'SignedLayout' },

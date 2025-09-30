@@ -1,6 +1,7 @@
 <?php
 
 use Controllers\AuthController;
+use Controllers\ConstantController;
 use Controllers\LocationController;
 use Controllers\PageController;
 use Controllers\PermissionController;
@@ -31,11 +32,13 @@ $router->add('GET', '/api/location/departments/{id_department}/municipality', [L
 $router->add('GET', '/api/rol', [RolController::class, 'getAll']);
 
 $router->add('GET', '/api/permission', [PermissionController::class, 'getAll']);
+$router->add('GET', '/api/permission/users', [PageController::class, 'getPermissionsByUsers']);
+$router->add('GET', '/api/permission/role', [PageController::class, 'getPermissionsByRole']);
 $router->add('POST', '/api/permission/{idPagina}/role/{idRol}', [PermissionController::class, 'savePermissionsByRole']);
 
 $router->add('GET', '/api/page/{idPage}', [PageController::class, 'getAllChilds']);
-$router->add('GET', '/api/page/permissions/users', [PageController::class, 'getPermissionsByUsers']);
-$router->add('GET', '/api/page/permissions/role', [PageController::class, 'getPermissionsByRole']);
 
 $router->add('GET', '/api/users/{id}', [UserController::class, 'getUserById']);
 $router->add('GET', '/api/user/template', [UserController::class, 'getUserTemplate']);
+
+$router->add('GET', '/api/constant/{id}', [ConstantController::class, 'getConstants']);
